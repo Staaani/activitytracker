@@ -22,43 +22,25 @@ const ActivityTracker: React.FC = () => {
 // src/components/ActivityTracker.tsx
 
     const saveCounterValue = (count: number, startTime: Date, endTime: Date) => {
-        const activityIndex = activities.findIndex(activity => activity.name === selectedActivity);
-        if (activityIndex !== -1) {
-            const updatedActivity = { ...activities[activityIndex] };
-            updatedActivity.records.push(count);
-            const updatedActivities = [...activities];
-            updatedActivities[activityIndex] = updatedActivity;
-            setActivities(updatedActivities);
-        } else {
-            const newActivity: Activity = {
-                id: new Date().toISOString(),
-                name: selectedActivity!,
-                type: 'time',
-                records: [count],
-                timestamps: [{ start: startTime, end: endTime }]  // Add this line
-            };
-            setActivities([...activities, newActivity]);
-        }
+        const newActivity: Activity = {
+            id: new Date().toISOString(),
+            name: selectedActivity!,
+            type: 'time',
+            record: count,
+            timestamp: { start: startTime, end: endTime }
+        };
+        setActivities([...activities, newActivity]);
     };
 
     const saveRepetitions = (repetitions: number, startTime: Date, endTime: Date) => {
-        const activityIndex = activities.findIndex(activity => activity.name === selectedActivity);
-        if (activityIndex !== -1) {
-            const updatedActivity = { ...activities[activityIndex] };
-            updatedActivity.records.push(repetitions);
-            const updatedActivities = [...activities];
-            updatedActivities[activityIndex] = updatedActivity;
-            setActivities(updatedActivities);
-        } else {
-            const newActivity: Activity = {
-                id: new Date().toISOString(),
-                name: selectedActivity!,
-                type: 'repetitions',
-                records: [repetitions],
-                timestamps: [{ start: startTime, end: endTime }]  // Add this line
-            };
-            setActivities([...activities, newActivity]);
-        }
+        const newActivity: Activity = {
+            id: new Date().toISOString(),
+            name: selectedActivity!,
+            type: 'repetitions',
+            record: repetitions,
+            timestamp: { start: startTime, end: endTime }
+        };
+        setActivities([...activities, newActivity]);
     };
 
 
@@ -76,13 +58,12 @@ const ActivityTracker: React.FC = () => {
             <ul>
                 {activities.map((activity) => (
                     <li key={activity.id}>
-                        {activity.name} ({activity.type}) - Records: {activity.records.join(', ')}
+                        {activity.name} ({activity.type}) - Record: {activity.record}
                         <ul>
-                            {activity.timestamps.map((timestamp, index) => (
-                                <li key={index}>
-                                    Start: {new Date(timestamp.start).toLocaleString()}, End: {new Date(timestamp.end).toLocaleString()}
-                                </li>
-                            ))}
+                            <li>
+                                Start: {new Date(activity.timestamp.start).toLocaleString()},
+                                End: {new Date(activity.timestamp.end).toLocaleString()}
+                            </li>
                         </ul>
                     </li>
                 ))}

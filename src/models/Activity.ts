@@ -2,9 +2,8 @@ export interface Activity {
     id: string;
     name: string;
     type: 'time' | 'repetitions';
-    records: number[];
-    timestamps: { start: Date; end: Date }[];
-
+    record: number;
+    timestamp: { start: Date; end: Date };
 }
 
 export interface Record {

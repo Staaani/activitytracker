@@ -1,8 +1,8 @@
 // src/components/Counter.tsx
 
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 
-const Counter: React.FC<{ onSave: (count: number, start: Date, end: Date) => void }> = ({ onSave }) => {
+const Counter: React.FC<{ onSave: (count: number, start: Date, end: Date) => void }> = ({onSave}) => {
     const [counter, setCounter] = useState<number>(0);
     const [isRunning, setIsRunning] = useState<boolean>(false);
 
@@ -12,7 +12,13 @@ const Counter: React.FC<{ onSave: (count: number, start: Date, end: Date) => voi
     const startCounter = () => {
         setIsRunning(true);
         const start = new Date();
-        setStartTime(start);
+        if (endTime !== null) {
+            setCounter(0);
+            setStartTime(start);
+        } else {
+            setStartTime(start);
+        }
+
     };
 
     const stopCounter = () => {
