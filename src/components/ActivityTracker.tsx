@@ -1,7 +1,7 @@
 // src/components/ActivityTracker.tsx
 
-import React, { useState } from 'react';
-import { Activity } from '../models/Activity';
+import React, {useState} from 'react';
+import {Activity} from '../models/Activity';
 import Counter from './Counter';
 import ActivityDropdown from './ActivityDropdown';
 import RepetitionWheel from './RepetitionWheel';
@@ -9,15 +9,17 @@ import RepetitionWheel from './RepetitionWheel';
 const ActivityTracker: React.FC = () => {
     const [activities, setActivities] = useState<Activity[]>([]);
     const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
+    const [allActivities, setAllActivities] = useState([
+        {name: 'Breath', type: 'time'},
+        {name: 'Push Ups', type: 'repetitions'},
+    ]);
 
     const predefinedActivities = [
-        { name: 'Breath', type: 'time' },
-        { name: 'Push Ups', type: 'repetitions' },
+        {name: 'Breath', type: 'time'},
+        {name: 'Push Ups', type: 'repetitions'},
     ];
 
-    const selectedActivityType = predefinedActivities.find(
-        (activity) => activity.name === selectedActivity
-    )?.type;
+    const selectedActivityType = allActivities.find(activity => activity.name === selectedActivity)?.type;
 
 // src/components/ActivityTracker.tsx
 
@@ -27,7 +29,7 @@ const ActivityTracker: React.FC = () => {
             name: selectedActivity!,
             type: 'time',
             record: count,
-            timestamp: { start: startTime, end: endTime }
+            timestamp: {start: startTime, end: endTime}
         };
         setActivities([...activities, newActivity]);
     };
@@ -38,22 +40,51 @@ const ActivityTracker: React.FC = () => {
             name: selectedActivity!,
             type: 'repetitions',
             record: repetitions,
-            timestamp: { start: startTime, end: endTime }
+            timestamp: {start: startTime, end: endTime}
         };
         setActivities([...activities, newActivity]);
+    };
+
+    const [newActivityName, setNewActivityName] = useState('');
+    const [newActivityType, setNewActivityType] = useState('time');
+
+    const handleAddActivity = () => {
+        const newActivity = {name: newActivityName, type: newActivityType};
+        setAllActivities([...allActivities, newActivity]);
+        setNewActivityName('');
+        setNewActivityType('time');
     };
 
 
     return (
         <div>
             <h1>Activity Tracker</h1>
-            <ActivityDropdown activities={predefinedActivities} onSelect={setSelectedActivity} />
-
-            {selectedActivityType === 'time' ? (
-                <Counter onSave={saveCounterValue} />
-            ) : selectedActivityType === 'repetitions' ? (
-                <RepetitionWheel onSave={saveRepetitions} />
-            ) : null}
+            <h2>Add New Activity</h2>
+            <input
+                type="text"
+                placeholder="Activity name"
+                value={newActivityName}
+                onChange={(e) => setNewActivityName(e.target.value)}
+            />
+            <select
+                value={newActivityType}
+                onChange={(e) => setNewActivityType(e.target.value)}
+            >
+                <option value="time">Time</option>
+                <option value="repetitions">Repetitions</option>
+            </select>
+            <button onClick={handleAddActivity}>Add Activity</button>
+            <ActivityDropdown activities={allActivities} onSelect={setSelectedActivity}/>
+            {selectedActivity && (
+                <>
+                    <h2>Selected Activity: {selectedActivity}</h2>
+                    {selectedActivityType === 'time' ? (
+                        <Counter onSave={saveCounterValue} />
+                    ) : (
+                        <RepetitionWheel onSave={saveRepetitions} />
+                    )}
+                </>
+            )}
 
             <ul>
                 {activities.map((activity) => (
