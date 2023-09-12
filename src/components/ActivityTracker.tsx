@@ -23,7 +23,6 @@ const ActivityTracker: React.FC = () => {
 
     const saveCounterValue = (count: number, startTime: Date, endTime: Date) => {
         const activityIndex = activities.findIndex(activity => activity.name === selectedActivity);
-        const timestamp = { start: startTime, end: endTime };
         if (activityIndex !== -1) {
             const updatedActivity = { ...activities[activityIndex] };
             updatedActivity.records.push(count);
@@ -44,7 +43,6 @@ const ActivityTracker: React.FC = () => {
 
     const saveRepetitions = (repetitions: number, startTime: Date, endTime: Date) => {
         const activityIndex = activities.findIndex(activity => activity.name === selectedActivity);
-        const timestamp = { start: startTime, end: endTime };
         if (activityIndex !== -1) {
             const updatedActivity = { ...activities[activityIndex] };
             updatedActivity.records.push(repetitions);
